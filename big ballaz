@@ -1,6 +1,11 @@
+
+
+
+
 local lp = game:GetService("Players").LocalPlayer
 
 if lp:IsFriendsWith(655897769) and lp:IsInGroup(10825946) then
-loadstring(game:HttpGet('https://github.com/GHOSTSSFUCKYOU/ts/blob/main/tke'))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/GHOSTSSFUCKYOU/ts/main/tke'))()
 else
-lp:Kick("sex..")
+lp:Kick("big ballaz")
+end
