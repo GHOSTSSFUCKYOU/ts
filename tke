@@ -1,7 +1,8 @@
--- LurkTek
+-- big ballaz
 
 local LoadingTime = tick()
-local Commands, Prefix = {}, ""
+local Commands = {}
+local Prefix = ""
 getgenv().Notify = function(title, text, icon, time)
     game:GetService("StarterGui"):SetCore(
         "SendNotification",
@@ -195,6 +196,54 @@ end
 getgenv().EspPlayer = function(Dude)
     local bgui = Instance.new("BillboardGui", Dude.Character.Head)
     local tlabel = Instance.new("TextLabel", bgui)
+    
+ local camera = game:GetService("Workspace").CurrentCamera
+local CurrentCamera = workspace.CurrentCamera
+local worldToViewportPoint = CurrentCamera.worldToViewportPoint
+
+local HeadOff = Vector3.new(0, 0.5, 0)
+local LegOff = Vector3.new(0,3,0)
+
+
+    local BoxOutline = Drawing.new("Square")
+    BoxOutline.Visible = false
+    BoxOutline.Color = Color3.new(0,0,0)
+    BoxOutline.Thickness = 3
+    BoxOutline.Transparency = 1
+    BoxOutline.Filled = false
+
+    local Box = Drawing.new("Square")
+    Box.Visible = false
+    Box.Color = Color3.new(255,255,255)
+    Box.Thickness = 1
+    Box.Transparency = 1
+    Box.Filled = false
+
+
+            game:GetService("RunService").RenderStepped:Connect(function()
+                local Vector, onScreen = camera:worldToViewportPoint(Dude.Character.HumanoidRootPart.Position)
+
+                local RootPart = Dude.Character.HumanoidRootPart
+                local Head = Dude.Character.Head
+                local RootPosition, RootVis = worldToViewportPoint(CurrentCamera, RootPart.Position)
+                local HeadPosition = worldToViewportPoint(CurrentCamera, Head.Position + HeadOff)
+                local LegPosition = worldToViewportPoint(CurrentCamera, RootPart.Position - LegOff)
+
+                if onScreen then
+                    BoxOutline.Size = Vector2.new(1000 / RootPosition.Z, HeadPosition.Y - LegPosition.Y)
+                    BoxOutline.Position = Vector2.new(RootPosition.X - BoxOutline.Size.X / 2, RootPosition.Y - BoxOutline.Size.Y / 2)
+                    BoxOutline.Visible = true
+
+                    Box.Size = Vector2.new(1000 / RootPosition.Z, HeadPosition.Y - LegPosition.Y)
+                    Box.Position = Vector2.new(RootPosition.X - Box.Size.X / 2, RootPosition.Y - Box.Size.Y / 2)
+                    Box.Visible = true
+
+                    
+                end
+
+
+    
+
 
     bgui.Name = "ESP"
     bgui.Adornee = part
@@ -212,9 +261,8 @@ getgenv().EspPlayer = function(Dude)
     tlabel.ZIndex = 10
     tlabel.Font = "SourceSansBold"
     tlabel.FontSize = "Size14"
-    RService.RenderStepped:Connect(
-        function()
-            if Dude and Dude.Character and Dude.Character:FindFirstChildOfClass("Humanoid") then
+   
+            
                 tlabel.Text =
                     Dude.Name ..
                     " [" ..
@@ -225,11 +273,12 @@ getgenv().EspPlayer = function(Dude)
                                         " [" ..
                                             math.floor(Dude:DistanceFromCharacter(Client.Character.Head.Position)) ..
                                                 "]"
-            end
-        end
-    )
-    tlabel.TextColor = BrickColor.new("Toothpaste")
+
+        
+    
+    tlabel.TextColor = BrickColor.new("Phosph. White")
     tlabel.TextStrokeTransparency = 0.1
+end)
 end
 
 local mt = getrawmetatable(game)
@@ -249,7 +298,7 @@ backup =
 
 getgenv().togglefly = function()
     Flying = not Flying
-    Notify("LurkTek", "Flying: " .. tostring(Flying), "", 3)
+    Notify("big ballaz", "Flying: " .. tostring(Flying), "", 3)
     local T = Client.Character:FindFirstChild("HumanoidRootPart") or Client.Character:FindFirstChild("Torso")
     local BV, BG = INew("BodyVelocity", T), INew("BodyGyro", T)
     BV.Velocity = Vec3(0, 0.1, 0)
@@ -319,14 +368,14 @@ Uis.InputBegan:Connect(
             end
             if Key.KeyCode == Enum.KeyCode.F then
                 if FirstFly == true then
-                    Notify("LurkTek v1", "You can now fly, like a bird.", "", 3)
+                    Notify("big ballaz v1", "You can now fly, like a bird.", "", 3)
                     FirstFly = false
                 end
                 togglefly()
             end
             if Key.KeyCode == Enum.KeyCode.X then
                 Noclip = not Noclip
-                Notify("LurkTek", "Noclip: " .. tostring(Noclip), "", 3)
+                Notify("big ballaz", "Noclip: " .. tostring(Noclip), "", 3)
             end
             if Key.KeyCode == Enum.KeyCode.LeftShift then
                 KeysTable["LeftShift"] = true
@@ -488,7 +537,7 @@ Commands["pl, play, playsong, ps, song  -|- Play a Song |"] = {
                 Radio.Parent = Client.Character
                 Radio.RemoteEvent:FireServer("play", tonumber(Args[1]))
             end
-            Notify("LurkTek", "Audio: " .. tonumber(Args[1]), "", 3)
+            Notify("big ballaz", "Audio: " .. tonumber(Args[1]), "", 3)
         end
     end
 }
@@ -514,7 +563,7 @@ Commands["| fs, flyspeed -|- Sets your Flyspeed |"] = {
     ["Function"] = function(Args)
         if Args[1] then
             Flyspeed = tonumber(Args[1])
-            Notify("LurkTek", "Flyspeed: " .. tonumber(Flyspeed), "", 3)
+            Notify("big ballaz", "Flyspeed: " .. tonumber(Flyspeed), "", 3)
         end
     end
 }
@@ -530,7 +579,7 @@ Commands["| prefix, pfix -|- Sets your Chat Command Prefix |"] = {
         if Args[1] then
             Prefix = Args[1]
         end
-        Notify("LurkTek", "Prefix: " .. tostring(Prefix), "", 3)
+        Notify("big ballaz", "Prefix: " .. tostring(Prefix), "", 3)
     end
 }
 Commands["| fov, fieldofview -|- Sets your FieldOfView |"] = {
@@ -539,14 +588,14 @@ Commands["| fov, fieldofview -|- Sets your FieldOfView |"] = {
         if Args[1] then
             Camera.FieldOfView = tonumber(Args[1])
         end
-        Notify("LurkTek", "FieldOfView: " .. tonumber(Args[1]), "", 3)
+        Notify("big ballaz", "FieldOfView: " .. tonumber(Args[1]), "", 3)
     end
 }
 Commands["| blink -|- Toggles Blink |"] = {
     ["Aliases"] = {"blink", "blinkspd"},
     ["Function"] = function(Args)
         Blink = not Blink
-        Notify("LurkTek", "Blink: " .. tostring(Blink), "", 3)
+        Notify("big ballaz", "Blink: " .. tostring(Blink), "", 3)
     end
 }
 Commands["| esp, find -|- Esp a Player |"] = {
@@ -556,9 +605,10 @@ Commands["| esp, find -|- Esp a Player |"] = {
             EspTarget = SearchPlayers(Args[1])
             if EspTarget then
                 EspPlayer(EspTarget)
+               
             end
         end
-        Notify("LurkTek", "Esp Target: " .. tostring(EspTarget), "", 3)
+        Notify("big ballaz", "Esp Target: " .. tostring(EspTarget), "", 3)
     end
 }
 Commands["| unesp, unfind -|- UnEsp Esp'd Player |"] = {
@@ -570,7 +620,8 @@ Commands["| unesp, unfind -|- UnEsp Esp'd Player |"] = {
             if UnEspPlayer then
                 for _, v in next, UnEspPlayer.Character:GetDescendants() do
                     if v:IsA("BillboardGui") or v:IsA("TextLabel") then
-                        v:Destroy() --[[if staircase(s) go brrrRRR]]
+                        v:Destroy() 
+                        
                     end
                 end
             end
@@ -596,7 +647,7 @@ Commands["| cam, camlock, cl, cml -|- Sets Camlock Target |"] = {
             CamlockTarget = SearchPlayers(Args[1])
             Camlock = true
         end
-        Notify("LurkTek", "Camlock Target: " .. tostring(CamlockTarget), "", 3)
+        Notify("big ballaz", "Camlock Target: " .. tostring(CamlockTarget), "", 3)
     end
 }
 Commands["| uncam, uncamlock, uncl, uncml -|- UnCamlocks Camlocked Target |"] = {
@@ -604,7 +655,7 @@ Commands["| uncam, uncamlock, uncl, uncml -|- UnCamlocks Camlocked Target |"] = 
     ["Function"] = function()
         CamlockTarget = nil
         Camlock = false
-        Notify("LurkTek", "Camlock: " .. tostring(Camlock), "", 3)
+        Notify("big ballaz", "Camlock: " .. tostring(Camlock), "", 3)
     end
 }
 Commands["| aim, s, aimbot, shoot, aimlock -|- Sets Aimbot Target |"] = {
@@ -614,7 +665,7 @@ Commands["| aim, s, aimbot, shoot, aimlock -|- Sets Aimbot Target |"] = {
             AimbotTarget = SearchPlayers(Args[1])
             Aimbot = true
         end
-        Notify("LurkTek", "Aimbot Target: " .. tostring(AimbotTarget), "", 3)
+        Notify("big ballaz", "Aimbot Target: " .. tostring(AimbotTarget), "", 3)
     end
 }
 Commands["| unaim, uns, unaimbot, unshoot -|- UnAimbots Aimbotted Target |"] = {
@@ -622,7 +673,7 @@ Commands["| unaim, uns, unaimbot, unshoot -|- UnAimbots Aimbotted Target |"] = {
     ["Function"] = function()
         AimbotTarget = nil
         Aimbot = false
-        Notify("LurkTek", "Aimbot: " .. tostring(Aimbot), "", 3)
+        Notify("big ballaz", "Aimbot: " .. tostring(Aimbot), "", 3)
     end
 }
 Commands["| view -|- View a Player |"] = {
@@ -632,7 +683,7 @@ Commands["| view -|- View a Player |"] = {
             ViewTarget = SearchPlayers(Args[1])
             Viewing = true
         end
-        Notify("LurkTek", "View Target: " .. tostring(ViewTarget), "", 3)
+        Notify("big ballaz", "View Target: " .. tostring(ViewTarget), "", 3)
     end
 }
 Commands["| unview -|- UnView Viewed Target |"] = {
@@ -641,7 +692,7 @@ Commands["| unview -|- UnView Viewed Target |"] = {
         ViewTarget = nil
         Viewing = false
         Camera.CameraSubject = Client.Character
-        Notify("LurkTek", "Viewing: " .. tostring(Viewing), "", 3)
+        Notify("big ballaz", "Viewing: " .. tostring(Viewing), "", 3)
     end
 }
 Commands["| av/aimvelocity -|- Sets Aimvelocity |"] = {
@@ -650,14 +701,14 @@ Commands["| av/aimvelocity -|- Sets Aimvelocity |"] = {
         if Args[1] then
             Aimvelocity = tonumber(Args[1])
         end
-        Notify("LurkTek", "Aimvelocity: " .. tonumber(Args[1]), "", 3)
+        Notify("big ballaz", "Aimvelocity: " .. tonumber(Args[1]), "", 3)
     end
 }
 Commands["| nc, noclip, nclip -|- Toggles Noclip |"] = {
     ["Aliases"] = {"noclip", "nc", "nclip"},
     ["Function"] = function()
         Noclip = not Noclip
-        Notify("LurkTek", "Noclip: " .. tostring(Noclip), "", 3)
+        Notify("big ballaz", "Noclip: " .. tostring(Noclip), "", 3)
     end
 }
 Commands["| bs, blinkspeed -|- Sets Blinkspeed |"] = {
@@ -666,7 +717,7 @@ Commands["| bs, blinkspeed -|- Sets Blinkspeed |"] = {
         if Args[1] then
             Blinkspeed = tonumber(Args[1])
         end
-        Notify("LurkTek", "Blinkspeed: " .. tonumber(Args[1]), "", 3)
+        Notify("big ballaz", "Blinkspeed: " .. tonumber(Args[1]), "", 3)
     end
 }
 
@@ -716,7 +767,7 @@ Commands["| aimpart -|- SELECTS AIMPART |"] = {
         if AimPartTable[Args[1]] then
             AimPart = AimPartTable[Args[1]]
         end
-        Notify("LurkTek", "AimPart: " .. tostring(AimPart), "", 3)
+        Notify("big ballaz", "AimPart: " .. tostring(AimPart), "", 3)
     end
 }
 Commands["| rc/removechair -|- REMOVES CHAIRS |"] = {
@@ -857,7 +908,7 @@ Input.InputEnded:Connect(
     end
 )
 game:GetService("Workspace").FallenPartsDestroyHeight = math.huge - math.huge
-Notify("LurkTek", "Took " .. string.format("%.3f", tick() - LoadingTime) .. " seconds to load", "", 3)
+Notify("big ballaz", "Took " .. string.format("%.3f", tick() - LoadingTime) .. " seconds to load", "", 3)
 
 local LoadingTime = tick()
 
@@ -886,7 +937,7 @@ function CheckPlayer(v)
                 local ZetoxString, ZetoxString2 = "[ZETOX OVERLORD XAXA] WELCOME TO ZETOX V8", "[Oskar]"
                 local DrPoppaString, CitizenString = "D|U", "Citizen Man"
 
-                --rconsolename("script detector/logger v1 - by xaxa")
+                
 
                 if
                     string.sub(Msg, 1, string.len(CyAdminString)) == CyAdminString or
@@ -920,14 +971,16 @@ Players.PlayerAdded:Connect(CheckPlayer)
 spawn(
     function()
         Notify(
-            "LurkTek",
+            "big ballaz",
             "Script Logger v1.1, loaded in: " .. string.format("%.7f", tostring(tick() - LoadingTime)),
             "",
             2
         )
         wait(2)
-        Notify("LurkTek", "Press F9 to see people who are found to be using scripts!", "", 3)
+        Notify("big ballaz", "Press F9 to see people who are found to be using scripts!", "", 3)
     end
 )
 
 table.foreach(Commands, print)
+
+
