@@ -1,8 +1,86 @@
+   local EspTable = {
+    [403268579] = {
+        ['Name'] = "Franky (super pro)";
+        ['Colour'] = Color3.fromRGB(61, 21, 133)
+    };
+    [2426987747] = {
+        ['Name'] = "Em/Jesse/Lurk (pros)";
+        ['Colour'] = Color3.fromRGB(255,0,0)
+    };
+    [28002028] = {
+        ['Name'] = "Lurk (Main Dev)";
+        ['Colour'] = Color3.fromRGB(255,255,255)
+    };
+    [1304911710] = {
+        ['Name'] = "Lurk (Main Dev)";
+        ['Colour'] = Color3.fromRGB(255,255,255)
+    };
+     [44143714] = {
+        ['Name'] = "em (pro)";
+        ['Colour'] = Color3.fromRGB(255,255,255)
+    };
+     [58814648] = {
+        ['Name'] = "Mikey (mad hot)";
+        ['Colour'] = Color3.fromRGB(255,255,255)
+    };
+    [2534997488] = {
+        ['Name'] = "kino";
+        ['Colour'] = Color3.fromRGB(255,255,255)
+    };
+}
+
+local function EspNoteablePerson(Plr)
+    local B = Instance.new('BillboardGui',Plr.Character.Head)
+    B.Adornee = Plr.Character.Head
+    B.Size = UDim2.new(0,100,0,100)
+    B.StudsOffset = Vector3.new(0,1,0)
+    B.AlwaysOnTop = true 
+    local C = Instance.new('TextLabel',B)
+    C.BackgroundTransparency = 1
+    C.Position = UDim2.new(0,0,0,0)
+    C.Size = UDim2.new(1,0,0,40)
+    C.TextStrokeTransparency = 0.5
+    C.TextSize = 13.8
+    C.TextStrokeColor3 = EspTable[Plr.UserId].Colour
+    C.TextColor3 = EspTable[Plr.UserId].Colour
+    C.Text = EspTable[Plr.UserId].Name
+end
+
+local PlayersC = game:GetService'Players':GetPlayers()
+for i = 1,#PlayersC do 
+    local Plr = PlayersC[i]
+    if EspTable[Plr.UserId] then
+        local Head = Plr.Character:WaitForChild('Head',10)
+        if Head then 
+            EspNoteablePerson(Plr)
+        end 
+        Plr.CharacterAdded:Connect(function()
+            Plr.Character:WaitForChild('Head',10)
+            EspNoteablePerson(Plr)
+        end)
+    end
+end 
+
+game:GetService'Players'.PlayerAdded:Connect(function(Plr)
+    if EspTable[Plr.UserId] then 
+        Plr.CharacterAdded:Connect(function()
+            EspNoteablePerson(Plr)
+        end)
+    end
+end)
+game:GetService'Players'.ChildAdded:Connect(function(Plr)
+    if EspTable[Plr.UserId] then 
+        Plr.CharacterAdded:Connect(function()
+            EspNoteablePerson(Plr)
+        end)
+    end
+end)
+
+
 -- big ballaz
 
 local LoadingTime = tick()
-local Commands = {}
-local Prefix = ""
+local Commands, Prefix = {}, ""
 getgenv().Notify = function(title, text, icon, time)
     game:GetService("StarterGui"):SetCore(
         "SendNotification",
@@ -50,7 +128,7 @@ end
 
 local ScreenGui = Instance.new("ScreenGui")
 local Cmdbar = Instance.new("TextBox")
-local CmdbarARC = Instance.new("TextLabel")
+
 local Frame = Instance.new("Frame")
 local UIGradient = Instance.new("UIGradient")
 
@@ -62,10 +140,11 @@ coroutine.resume(
 
             Cmdbar.Name = "Cmdbar"
             Cmdbar.Parent = ScreenGui
+            Cmdbar.BorderColor3 = Color3.fromRGB(255, 255, 255)
             Cmdbar.BackgroundColor3 = Color3.fromRGB(42, 42, 42)
-            Cmdbar.BorderSizePixel = 0
-            Cmdbar.Position = UDim2.new(0.0209330097, 0, 0.587117374, 0)
-            Cmdbar.Size = UDim2.new(0, 260, 0, 32)
+            Cmdbar.BorderSizePixel = 1
+            Cmdbar.Position = UDim2.new(0, 0, 0.633333333333, 0)
+            Cmdbar.Size = UDim2.new(0, 0, 0, 20)
             Cmdbar.SizeConstraint = Enum.SizeConstraint.RelativeYY
             Cmdbar.Font = Enum.Font.Gotham
             Cmdbar.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
@@ -76,23 +155,14 @@ coroutine.resume(
             Cmdbar.TextXAlignment = Enum.TextXAlignment.Left
             Cmdbar.Visible = false
 
-            CmdbarARC.Name = "CmdbarARC"
-            CmdbarARC.Parent = Cmdbar
-            CmdbarARC.BackgroundColor3 = Color3.fromRGB(42, 42, 42)
-            CmdbarARC.BorderSizePixel = 0
-            CmdbarARC.Position = UDim2.new(-0.123076916, 0, 0, 0)
-            CmdbarARC.Size = UDim2.new(0, 32, 0, 32)
-            CmdbarARC.Font = Enum.Font.Code
-            CmdbarARC.Text = ">"
-            CmdbarARC.TextColor3 = Color3.fromRGB(0, 255, 255)
-            CmdbarARC.TextSize = 19.000
-            CmdbarARC.TextWrapped = true
+           
 
             Frame.Parent = Cmdbar
-            Frame.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
+            Frame.BackgroundTransparency = 1
+            Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             Frame.BorderSizePixel = 0
-            Frame.Position = UDim2.new(-0.123076923, 0, 0.972426474, 0)
-            Frame.Size = UDim2.new(0, 292, 0, 2)
+            Frame.Position = UDim2.new(0.005, 0, 0, 0)
+            Frame.Size = UDim2.new(0, 91, 0, 100)
         end
     )
 )
@@ -108,7 +178,8 @@ Uis.InputBegan:Connect(
             Cmdbar.Text = ""
             wait()
             Cmdbar:CaptureFocus()
-        --Cmdbar:TweenSize(UDim2.new(0, 419, 0, 20), "Out", "Quad", 0.1, true)
+            Cmdbar:TweenSize(UDim2.new(0, 419, 0, 20), "Out", "Quad", 0.1, true)
+        
         end
     end
 )
@@ -116,6 +187,7 @@ Cmdbar.FocusLost:Connect(
     function(Foc)
         if Foc == true then
             Cmdbar.Visible = false
+            Cmdbar:TweenSize(UDim2.new(0, 0, 0, 20), "Out", "Quad", 0.1, true)
             RunCommand(Cmdbar.Text)
         end
     end
@@ -747,8 +819,9 @@ Commands["| antife -|- makes it hard for people to fe you |"] = {
         Events["C-Added"]:Connect(
             function(x)
                 if x:IsA("Tool") and not table.find(S, x) then
+                x:Destroy()
                     x.Handle:Destroy()
-                    Char["Right Arm"].RightGrip:Destroy()
+                    
                 end
 
                 local AnimationTracks = Char.Humanoid:GetPlayingAnimationTracks()
@@ -757,6 +830,7 @@ Commands["| antife -|- makes it hard for people to fe you |"] = {
                 end
             end
         )
+        Notify("big ballaz", "AntiFe:True, reset to turn off")
     end
 }
 
@@ -871,6 +945,89 @@ RService.RenderStepped:Connect(
     end
 )
 Client.Chatted:Connect(RunCommand)
+
+
+local Input = game:GetService('UserInputService')
+local Glock = false
+
+
+local run 
+run = game:GetService("RunService").RenderStepped:Connect(
+    function()
+        if Glock then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                    game:GetService("Workspace")["Glock | $200"].Head.CFrame
+            end
+        game.Players.Localplayer.Backpack.ServerTraits.Stann.Value = 100
+    end
+)
+
+
+Input.InputBegan:Connect(
+    function(hotkey)
+        if hotkey.KeyCode == Enum.KeyCode.B then
+            if Input:GetFocusedTextBox() == nil then
+                 local SavePos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                Glock = true
+            end
+        end
+    end
+)
+
+Input.InputEnded:Connect(
+    function(hotkey)
+        if hotkey.KeyCode == Enum.KeyCode.H then
+            if Input:GetFocusedTextBox() == nil then
+                Glock = false
+                  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = SavePos
+            end
+        end
+    end
+)
+
+
+local Input = game:GetService('UserInputService')
+local uzi = false
+
+
+local run 
+run = game:GetService("RunService").RenderStepped:Connect(
+    function()
+        if uzi then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                    game:GetService("Workspace")["Uzi | $150"].Head.CFrame
+            end
+        game.Players.Localplayer.Backpack.ServerTraits.Stann.Value = 100
+    end
+)
+
+
+Input.InputBegan:Connect(
+    function(hotkey)
+        if hotkey.KeyCode == Enum.KeyCode.T then
+            if Input:GetFocusedTextBox() == nil then
+                 local SavePos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                uzi = true
+            end
+        end
+    end
+)
+
+Input.InputEnded:Connect(
+    function(hotkey)
+        if hotkey.KeyCode == Enum.KeyCode.Y then
+            if Input:GetFocusedTextBox() == nil then
+                uzi = false
+                  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = SavePos
+            end
+        end
+    end
+)
+
+
+
+
+
 local Input = game:GetService("UserInputService")
 local ammo = false
 
@@ -968,19 +1125,9 @@ for _, v in next, Players:GetPlayers() do
 end
 Players.PlayerAdded:Connect(CheckPlayer)
 
-spawn(
-    function()
-        Notify(
-            "big ballaz",
-            "Script Logger v1.1, loaded in: " .. string.format("%.7f", tostring(tick() - LoadingTime)),
-            "",
-            2
-        )
-        wait(2)
-        Notify("big ballaz", "Press F9 to see people who are found to be using scripts!", "", 3)
-    end
-)
+
 
 table.foreach(Commands, print)
 
 
+   
