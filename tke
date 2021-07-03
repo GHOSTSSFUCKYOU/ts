@@ -2,9 +2,9 @@
 local Players = game:GetService("Players")
 local LocalP = Players.LocalPlayer;
 getgenv().AdminTable = {
-  [403268579] = {["Access"] = 5};
   [28002028] = {["Access"] = 5};
   [655897769] = {["Access"] = 5};
+  [395372136] = {["Access"] = 5};
 }
 
 getgenv().psearch = function(Name)
@@ -330,53 +330,6 @@ getgenv().EspPlayer = function(Dude)
     local bgui = Instance.new("BillboardGui", Dude.Character.Head)
     local tlabel = Instance.new("TextLabel", bgui)
     
- local camera = game:GetService("Workspace").CurrentCamera
-local CurrentCamera = workspace.CurrentCamera
-local worldToViewportPoint = CurrentCamera.worldToViewportPoint
-
-local HeadOff = Vector3.new(0, 0.5, 0)
-local LegOff = Vector3.new(0,3,0)
-
-
-    local BoxOutline = Drawing.new("Square")
-    BoxOutline.Visible = false
-    BoxOutline.Color = Color3.new(0,0,0)
-    BoxOutline.Thickness = 3
-    BoxOutline.Transparency = 1
-    BoxOutline.Filled = false
-
-    local Box = Drawing.new("Square")
-    Box.Visible = false
-    Box.Color = Color3.new(255,255,255)
-    Box.Thickness = 1
-    Box.Transparency = 1
-    Box.Filled = false
-
-
-            game:GetService("RunService").RenderStepped:Connect(function()
-                local Vector, onScreen = camera:worldToViewportPoint(Dude.Character.HumanoidRootPart.Position)
-
-                local RootPart = Dude.Character.HumanoidRootPart
-                local Head = Dude.Character.Head
-                local RootPosition, RootVis = worldToViewportPoint(CurrentCamera, RootPart.Position)
-                local HeadPosition = worldToViewportPoint(CurrentCamera, Head.Position + HeadOff)
-                local LegPosition = worldToViewportPoint(CurrentCamera, RootPart.Position - LegOff)
-
-                if onScreen then
-                    BoxOutline.Size = Vector2.new(1000 / RootPosition.Z, HeadPosition.Y - LegPosition.Y)
-                    BoxOutline.Position = Vector2.new(RootPosition.X - BoxOutline.Size.X / 2, RootPosition.Y - BoxOutline.Size.Y / 2)
-                    BoxOutline.Visible = true
-
-                    Box.Size = Vector2.new(1000 / RootPosition.Z, HeadPosition.Y - LegPosition.Y)
-                    Box.Position = Vector2.new(RootPosition.X - Box.Size.X / 2, RootPosition.Y - Box.Size.Y / 2)
-                    Box.Visible = true
-
-                    
-                end
-
-
-    
-
 
     bgui.Name = "ESP"
     bgui.Adornee = part
@@ -394,18 +347,32 @@ local LegOff = Vector3.new(0,3,0)
     tlabel.ZIndex = 10
     tlabel.Font = "SourceSansBold"
     tlabel.FontSize = "Size14"
+
+    
+                    
+				
+        
    
-            
+            game:GetService("RunService").RenderStepped:Connect(function()
                 tlabel.Text =
                     Dude.Name ..
-                    " [" ..
+                    " [" .. " Health: " ..
                         math.floor(Dude.Character.Humanoid.Health) ..
                             "/" ..
                                 math.floor(Dude.Character.Humanoid.MaxHealth) ..
                                     "]" ..
-                                        " [" ..
+                                        " Distance: " .. "[".. 
                                             math.floor(Dude:DistanceFromCharacter(Client.Character.Head.Position)) ..
-                                                "]"
+                                                "]" .. " User: [" .. "No" .. "]"
+                                        
+                                                
+                                                
+                                                
+                                                
+                                               
+                                                   
+                                    
+                                                
 
         
     
@@ -413,7 +380,6 @@ local LegOff = Vector3.new(0,3,0)
     tlabel.TextStrokeTransparency = 0.1
 end)
 end
-
 local mt = getrawmetatable(game)
 local backup
 backup =
@@ -691,6 +657,36 @@ Commands["| afk, brb -|- Go AFK |"] = {
         )
     end
 }
+
+
+Commands["| check | Checks what your target has|"] = {
+    ["Aliases"] = {"check"},
+    ["Function"] = function(Args)
+        if Args[1] then
+            CheckTarget = SearchPlayers(Args[1])
+            
+            warn("[____________________]")
+            
+            if CheckTarget.Character:FindFirstChild("Glock") or CheckTarget.Backpack:FindFirstChild("Glock") then
+                warn(CheckTarget.Name .. ". Glock:True")
+                
+                if CheckTarget.Character:FindFirstChild("Shotty") or CheckTarget.Backpack:FindFirstChild("Shotty") then
+                warn(CheckTarget.Name .. ". Shotty:True")
+                
+                 if CheckTarget.Character:FindFirstChild("BulletResist") then
+                warn(CheckTarget.Name .. ". Vest:True")
+                
+            warn("[____________________]")
+            end
+            end
+            end
+        end
+    end
+    
+                
+    
+}
+
 Commands["| fs, flyspeed -|- Sets your Flyspeed |"] = {
     ["Aliases"] = {"flyspeed", "fs"},
     ["Function"] = function(Args)
@@ -752,7 +748,7 @@ Commands["| unesp, unfind -|- UnEsp Esp'd Player |"] = {
             UnEspPlayer = SearchPlayers(Args[1])
             if UnEspPlayer then
                 for _, v in next, UnEspPlayer.Character:GetDescendants() do
-                    if v:IsA("BillboardGui") or v:IsA("TextLabel") then
+                    if v:IsA("BillboardGui") or v:IsA("TextLabel") or v:IsA("BoxHandleAdornment") then
                         v:Destroy() 
                         
                     end
