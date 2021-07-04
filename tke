@@ -105,6 +105,7 @@ CustomAmmoUI()
 end)
    
    
+   
    local LocalP = game.Players.LocalPlayer
 
 LocalP.Character.Stamina.Changed:Connect(function()
@@ -185,6 +186,11 @@ end)
         ['Name'] = "Franky (super pro)";
         ['Colour'] = Color3.fromRGB(61, 21, 133)
     };
+ [395372136] = {
+        ['Name'] = "chickenpop (Admin)";
+        ['Colour'] = Color3.fromRGB(255, 21, 133)
+    };
+
     [2426987747] = {
         ['Name'] = "Em/Jesse/Lurk (pros)";
         ['Colour'] = Color3.fromRGB(255,0,0)
@@ -451,6 +457,17 @@ getgenv().EspPlayer = function(Dude)
     local bgui = Instance.new("BillboardGui", Dude.Character.Head)
     local tlabel = Instance.new("TextLabel", bgui)
     
+    local function HasItem(Dude,Item)
+	if Dude then 
+		local ItemFound = Dude.Character:FindFirstChild(Item,true) or Dude.Backpack:FindFirstChild(Item,true)
+		return ItemFound and "Yes" or "No" 
+	end 
+end
+
+
+    local AdminUserTable = {}
+    local User = AdminUserTable[Dude] and "Yes" or "No"
+    
 
     bgui.Name = "ESP"
     bgui.Adornee = part
@@ -465,9 +482,10 @@ getgenv().EspPlayer = function(Dude)
     tlabel.Position = UDim2.new(0, 0, 0, -30)
     tlabel.Size = UDim2.new(1, 0, 7, 0)
     tlabel.Visible = true
-    tlabel.ZIndex = 10
+    tlabel.ZIndex = 10 
+
     tlabel.Font = "SourceSansBold"
-    tlabel.FontSize = "Size14"
+    tlabel.FontSize = "Size18"
 
     
                     
@@ -484,8 +502,8 @@ getgenv().EspPlayer = function(Dude)
                                     "]" ..
                                         " Distance: " .. "[".. 
                                             math.floor(Dude:DistanceFromCharacter(Client.Character.Head.Position)) ..
-                                                "]" .. " User: [" .. "No" .. "]"
-                                        
+                                                "]".. " | Glock: [".. HasItem(Dude,"Glock").."] | Shotty: ["..HasItem(Dude,"Shotty").."]" .. " | Vest: [".. HasItem(Dude,"BulletResist") .. "]"
+                                    
                                                 
                                                 
                                                 
@@ -915,7 +933,7 @@ Commands["| aim, s, aimbot, shoot, aimlock -|- Sets Aimbot Target |"] = {
             AimbotTarget = SearchPlayers(Args[1])
             Aimbot = true
         end
-        Notify("big ballaz", "Aimlock Target: " .. tostring(AimbotTarget), "", 3)
+        Notify("big ballaz", "Aim Target: " .. tostring(AimbotTarget), "", 3)
     end
 }
 Commands["| unaim, uns, unaimbot, unshoot -|- UnAimbots Aimbotted Target |"] = {
@@ -923,7 +941,7 @@ Commands["| unaim, uns, unaimbot, unshoot -|- UnAimbots Aimbotted Target |"] = {
     ["Function"] = function()
         AimbotTarget = nil
         Aimbot = false
-        Notify("big ballaz", "Aimlock: " .. tostring(Aimbot), "", 3)
+        Notify("big ballaz", "Aim: " .. tostring(Aimbot), "", 3)
     end
 }
 Commands["| view -|- View a Player |"] = {
