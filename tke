@@ -915,7 +915,7 @@ Commands["| aim, s, aimbot, shoot, aimlock -|- Sets Aimbot Target |"] = {
             AimbotTarget = SearchPlayers(Args[1])
             Aimbot = true
         end
-        Notify("big ballaz", "Aimbot Target: " .. tostring(AimbotTarget), "", 3)
+        Notify("big ballaz", "Aimlock Target: " .. tostring(AimbotTarget), "", 3)
     end
 }
 Commands["| unaim, uns, unaimbot, unshoot -|- UnAimbots Aimbotted Target |"] = {
@@ -923,7 +923,7 @@ Commands["| unaim, uns, unaimbot, unshoot -|- UnAimbots Aimbotted Target |"] = {
     ["Function"] = function()
         AimbotTarget = nil
         Aimbot = false
-        Notify("big ballaz", "Aimbot: " .. tostring(Aimbot), "", 3)
+        Notify("big ballaz", "Aimlock: " .. tostring(Aimbot), "", 3)
     end
 }
 Commands["| view -|- View a Player |"] = {
