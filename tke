@@ -186,6 +186,17 @@ end)
         ['Name'] = "Franky (super pro)";
         ['Colour'] = Color3.fromRGB(61, 21, 133)
     };
+
+[218658622] = {
+        ['Name'] = "Eleven (hot)";
+        ['Colour'] = Color3.fromRGB(61, 21, 133)
+    };
+
+[2213122323] = {
+        ['Name'] = "Eleven (hot)";
+        ['Colour'] = Color3.fromRGB(61, 21, 133)
+    };
+
  [395372136] = {
         ['Name'] = "chickenpop (Admin)";
         ['Colour'] = Color3.fromRGB(255, 21, 133)
